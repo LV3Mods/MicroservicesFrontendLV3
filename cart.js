@@ -51,13 +51,50 @@ function getCart($email) {
 
 function deleteItem($id) {
 
-    //TODO complete implementation using the product id
-    alert("cart.js/deleteItem() is not implemented")
+    $.ajax({
+        url: Url+'Cart/'+$id,
+        type: 'delete',
+        dataType: 'json',
+        contentType:'text/plain',
+
+        success: function (){
+
+
+            alert("cart.js/deleteItem() success")
+            getCart(email);
+
+        },
+
+        error: function (){
+            alert("cart.js/deleteItem() faliure")
+        }
+    });
+    
 }
 
 function checkOut() {
 
+    $.ajax({
+        url:Url+'Cart',
+        type: 'PUT',
+        dataType: 'json',
+        data: JSON.stringify({"email":email}),
+        contentType: 'text/plain',
+
+        success: function (data){
+
+            alert("app.js/checkOut() success")
+            getCart(email);
+        },
+
+        error: function (data){
+            alert("app.js/checkOut() unsuccessful")
+        },   
+
+
+    })
+
     //TODO complete implementation
-    alert("cart.js/checkOut() is not implemented")
+    
 
 }

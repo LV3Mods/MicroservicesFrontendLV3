@@ -163,21 +163,82 @@ function fetchComments($id) {
 }
 
 function setComment($id) {
+    var newComment = $('#message-text').val();
+    var comment;
+    var commentAdd;
+    var Score = $('#score').val();
 
-    //TODO complete implementation using the product id
-    alert("app.js/setComment() not implemented")
+    $.ajax({
+        url: Url+'SetComment',
+        type:'post',
+        dataType:'json',
+        data: JSON.stringify({"product_id":$id,"comment":newComment,"score":Score}),
+        contentType: 'text/plain',
 
-    //HINT
-    //Take note of how the Ajax call in app.js/fetchComments() posts a GET request to corresponding API endpoint.
-    //Look at the Microservice API Documentation and find out the appripriate type of request for this action.
+        success: function (data) {
+            alert("app.js/setComment() success")
+
+            comment='';
+            comment='<div class="panel panel-default" style="width:800px">\n' +
+                '            <div class="panel-heading">\n' +
+                '                <span class="glyphicon glyphicon-comment"></span>\n' +
+                '                <h3 class="panel-title">\n' +
+                '                    Comments</h3>\n' +
+                '            </div>\n' +
+                '            <div class="panel-body">\n' +
+                '                <ul class="list-group">\n';
+            $.each(data['data']['List'], function(i, item) {
+                commentAdd ='                    <li class="list-group-item">\n' +
+                    '                        <div class="row">\n' +
+                    '                            <div class="col-xs-2 col-md-2">\n' +
+                    '                                <img src="img/comment.png" class="img-circle img-responsive" alt="" /></div>\n' +
+                    '                            <div class="col-xs-10 col-md-10">\n' +
+                    '                                <div><p>'+item['comment']+'</p></div>\n' +
+                    '                                <br/>\n' +
+                    '                                <div><h5 style="color: red"> Score: '+item['score']+'</h5></div>\n' +
+                    ' <div class="progress">\n' +
+                    '  <div class="progress-bar" role="progressbar" aria-valuenow="'+item['score']+'"\n' +
+                    '  aria-valuemin="0" aria-valuemax="5" style="width:'+(item['score']/5)*100+'%">\n' +
+                    '  </div>\n' +
+                    '</div>\n' +
+                    '                            </br>\n' +
+                    '                        </div>\n' +
+                    '                    </li>';
+                comment=comment+commentAdd;
+            });
+            comment=comment+'</ul></div></div>'
+            $('#comment-list').html(comment);
+        },
+        error: function (data){
+            alert("app.js/setComment() Error")
+        }
+    })
 
 }
 
 function addToCart($id) {
 
-    //TODO complete implementation using the product id
-    alert("app.js/addToCart() not implemented")
+    let email =$.trim($('#email').val());
 
+    $.ajax({
+        url: Url+'AddToCart',
+        type: 'post',
+        dataType: 'json',
+        data: JSON.stringify({"product_id":$id,"email":email}),
+        contentType: 'text/plain',
+
+
+        success: function (data){
+
+            alert("app.js/addToCart() success")
+        },
+
+        error: function (data){
+            alert("app.js/addToCart() unsuccessful")
+        },        
+        
+
+    })
 
 }
 
